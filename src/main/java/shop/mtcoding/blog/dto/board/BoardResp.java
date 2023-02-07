@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class BoardResp {
+
     @Setter
     @Getter
     public static class BoardMainRespDto {
