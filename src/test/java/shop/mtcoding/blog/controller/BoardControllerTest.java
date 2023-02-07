@@ -21,9 +21,11 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.mtcoding.blog.dto.board.BoardResp;
+import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog.model.User;
 
 @AutoConfigureMockMvc
@@ -67,7 +69,26 @@ public class BoardControllerTest {
         resultActions.andExpect(status().isOk());
         assertThat(dtos.size()).isEqualTo(6);
         assertThat(dtos.get(0).getUsername()).isEqualTo("ssar");
-        assertThat(dtos.get(0).getTitle()).isEqualTo("제목1");
+        assertThat(dtos.get(0).getTitle()).isEqualTo("1번째 제목");
+    }
+
+    @Test
+    public void detail_test() throws Exception {
+        // given
+        int id = 1;
+        // when
+        ResultActions resultActions = mvc.perform(
+                get("/board/" + id));
+        Map<String, Object> map = resultActions.andReturn().getModelAndView().getModel();
+        BoardDetailRespDto dto = (BoardDetailRespDto) map.get("dto");
+        String model = om.writeValueAsString(dto);
+        System.out.println("테스트 : " + model);
+
+        // then
+        resultActions.andExpect(status().isOk());
+        assertThat(dto.getUsername()).isEqualTo("ssar");
+        assertThat(dto.getUserId()).isEqualTo(1);
+        assertThat(dto.getTitle()).isEqualTo("1번째 제목");
     }
 
     @Test
