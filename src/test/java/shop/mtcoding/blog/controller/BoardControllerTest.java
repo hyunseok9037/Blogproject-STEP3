@@ -1,8 +1,10 @@
 package shop.mtcoding.blog.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.sql.Timestamp;
@@ -21,7 +23,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.mtcoding.blog.dto.board.BoardResp;
@@ -51,6 +52,29 @@ public class BoardControllerTest {
 
         mockSessin = new MockHttpSession();
         mockSessin.setAttribute("principal", user);
+    }
+
+    @Test
+    public void delete_test() throws Exception {
+        // given
+        int id = 1;
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                delete("/board/" + id).session(mockSessin));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString(null);
+        System.out.println("테스트:" + responseBody);
+
+        /**
+         * jsonPath
+         * 최상위: $
+         * 객체탐색:닷(.)
+         * 배열:[0] 번지수
+         * $[0].title
+         */
+        // then 302 가뜨는지
+        resultActions.andExpect(jsonPath("$.code").value("1"));
+        resultActions.andExpect(status().isOk());
     }
 
     @Test
