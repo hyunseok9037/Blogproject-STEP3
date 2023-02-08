@@ -1,5 +1,9 @@
 package shop.mtcoding.blog.service;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,13 +24,25 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     // where 절에 걸리는 파라메터를 앞에 받기
+    // 1.content 내용을 Document로 받고, img 찾아내서(0, 1, 2), src를 찾아서 thumbnail 추가
     @Transactional
     public int 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
-
-        // 1.content 내요용을 Document로 받고, img 찾아내서(0, 1, 2), src를 찾아서 thumbnail 추가
+        Document doc = Jsoup.parse(boardSaveReqDto.getContent());
+        // System.out.println(doc);
+        Elements els = doc.select("img");
+        // System.out.println(els);
+        String thumbnail = "";
+        if (els.size() == 0) {
+            // 임시 사진 제공해주기
+            // 디비 thumnail -> /images/profile.jfif
+        } else {
+            Element el = els.get(0);
+            thumbnail = el.attr("src");
+            // 디비 thumnail -> img
+        }
 
         int result = boardRepository.insert(
-            boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(),null,userId);
+                boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(), thumbnail, userId);
         if (result != 1) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
