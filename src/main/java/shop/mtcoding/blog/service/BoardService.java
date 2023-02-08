@@ -15,6 +15,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.util.Thumbnail;
 
 @Transactional(readOnly = true)
 @Service
@@ -26,28 +27,13 @@ public class BoardService {
     // where 절에 걸리는 파라메터를 앞에 받기
     // 1.content 내용을 Document로 받고, img 찾아내서(0, 1, 2), src를 찾아서 thumbnail 추가
     @Transactional
-    public int 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
-        Document doc = Jsoup.parse(boardSaveReqDto.getContent());
-        // System.out.println(doc);
-        Elements els = doc.select("img");
-        // System.out.println(els);
-        String thumbnail = "";
-        if (els.size() == 0) {
-            // 임시 사진 제공해주기
-            // 디비 thumnail -> /images/profile.jfif
-        } else {
-            Element el = els.get(0);
-            thumbnail = el.attr("src");
-            // 디비 thumnail -> img
-        }
-
+    public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
+        String thumbnail = Thumbnail.thum(boardSaveReqDto.getContent());
         int result = boardRepository.insert(
                 boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(), thumbnail, userId);
         if (result != 1) {
             throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return 1;
     }
 
     @Transactional
@@ -79,16 +65,7 @@ public class BoardService {
             throw new CustomException("게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
-        Document doc = Jsoup.parse(boardupdateReqDto.getContent());
-        Elements els = doc.select("img");
-        String thumbnail = "";
-        if (els.size() == 0) {
-
-        } else {
-            Element el = els.get(0);
-            thumbnail = el.attr("src");
-        }
-
+        String thumbnail = Thumbnail.thum(boardupdateReqDto.getContent());
         int result = boardRepository.updateById(id, boardupdateReqDto.getTitle(), thumbnail,
                 boardupdateReqDto.getContent());
         if (result != 1) {
