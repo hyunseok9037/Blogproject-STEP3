@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import shop.mtcoding.blog.dto.board.BoardReq.BoardupdateReqDto;
 import shop.mtcoding.blog.dto.board.BoardResp;
 import shop.mtcoding.blog.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog.model.User;
@@ -54,6 +56,29 @@ public class BoardControllerTest {
 
         mockSessin = new MockHttpSession();
         mockSessin.setAttribute("principal", user);
+    }
+
+    @Test
+    public void update_test() throws Exception {
+        // given
+        int id = 1;
+        BoardupdateReqDto boardupdateReqDto = new BoardupdateReqDto();
+        boardupdateReqDto.setTitle("제목1-수정");
+        boardupdateReqDto.setContent("내용1-수정");
+
+        String requestBody = om.writeValueAsString(boardupdateReqDto);
+        System.out.println("테스트:" + requestBody);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                put("/board/" + id)
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .session(mockSessin));
+
+        // then
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.code").value(1));
     }
 
     @Test
