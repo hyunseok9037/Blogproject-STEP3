@@ -8,7 +8,7 @@
                     <input type="text" class="form-control" placeholder="Enter title" name="title" id="title"
                         value="${board.title}">
                 </div>
-
+            
                 <div class="form-group">
                     <textarea class="form-control summernote" rows="5" id="content" name="content">${board.content}
                 </textarea>
