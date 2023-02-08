@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.dto.board.BoardReq.BoardSaveReqDto;
+import shop.mtcoding.blog.dto.board.BoardReq.BoardupdateReqDto;
 import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
@@ -48,4 +49,12 @@ public class BoardService {
         }
     }
 
+    @Transactional
+    public int 게시글수정(BoardupdateReqDto boardupdateReqDto, int userId) {
+        int result = boardRepository.updateById(userId, boardupdateReqDto.getContent(), boardupdateReqDto.getTitle());
+        if (result != 1) {
+            throw new CustomException("글수정 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return 1;
+    }
 }

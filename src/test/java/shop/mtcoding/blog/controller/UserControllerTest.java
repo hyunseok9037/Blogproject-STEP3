@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog.model.User;
 
@@ -23,6 +24,7 @@ import shop.mtcoding.blog.model.User;
  * 테스트는 순서가 뭐가먼저 실행될지 모른다.
  */
 
+@Transactional
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 public class UserControllerTest {
