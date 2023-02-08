@@ -79,7 +79,18 @@ public class BoardService {
             throw new CustomException("게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
-        int result = boardRepository.updateById(id, boardupdateReqDto.getTitle(), boardupdateReqDto.getContent());
+        Document doc = Jsoup.parse(boardupdateReqDto.getContent());
+        Elements els = doc.select("img");
+        String thumbnail = "";
+        if (els.size() == 0) {
+
+        } else {
+            Element el = els.get(0);
+            thumbnail = el.attr("src");
+        }
+
+        int result = boardRepository.updateById(id, boardupdateReqDto.getTitle(), thumbnail,
+                boardupdateReqDto.getContent());
         if (result != 1) {
             throw new CustomApiException("게시글을 수정에 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
