@@ -7,7 +7,7 @@ import org.jsoup.select.Elements;
 
 public class Thumbnail {
 
-    public static String thum(String html) {
+    public static String getThumbnail(String html) {
         String thumbnail = "";
         Document doc = Jsoup.parse(html);
         Elements els = doc.select("img");

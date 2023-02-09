@@ -1,9 +1,5 @@
 package shop.mtcoding.blog.service;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,11 +24,11 @@ public class BoardService {
     // 1.content 내용을 Document로 받고, img 찾아내서(0, 1, 2), src를 찾아서 thumbnail 추가
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
-        String thumbnail = Thumbnail.thum(boardSaveReqDto.getContent());
+        String thumbnail = Thumbnail.getThumbnail(boardSaveReqDto.getContent());
         int result = boardRepository.insert(
                 boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(), thumbnail, userId);
         if (result != 1) {
-            throw new CustomException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomApiException("글쓰기 실패", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -65,7 +61,7 @@ public class BoardService {
             throw new CustomException("게시글을 수정할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
-        String thumbnail = Thumbnail.thum(boardupdateReqDto.getContent());
+        String thumbnail = Thumbnail.getThumbnail(boardupdateReqDto.getContent());
         int result = boardRepository.updateById(id, boardupdateReqDto.getTitle(), thumbnail,
                 boardupdateReqDto.getContent());
         if (result != 1) {

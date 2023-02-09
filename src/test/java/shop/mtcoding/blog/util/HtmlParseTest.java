@@ -23,7 +23,7 @@ public class HtmlParseTest {
 
     @Test
     public void jsoup_test2() {
-        String html = "<p>1</p><p><img src=\"data:image/png;base64,iVBORw0KG\"></p>";
+        String html = "<p>1</p><p><img src=\"data:image/png;base64,iVBORw0KG\"></p>"; // given data
         Document doc = Jsoup.parse(html);
         // System.out.println(doc);
         Elements els = doc.select("img");
