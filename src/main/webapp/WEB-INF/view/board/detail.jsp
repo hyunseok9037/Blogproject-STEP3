@@ -50,8 +50,27 @@
                 </ul>
             </div>
         </div>
+
         <script>
-            
+           
+
+            function deleteByReplyId(id) {
+                $.ajax({
+                    type: "delete",
+                    url: "/reply/" + id,
+                    dataType: "json"
+                }).done((res) => {    // 20x 일때
+                    alert(res.msg);
+                    location.href = "/";
+                }).fail((err) => {    // 40x , 50x 일때
+                    // console.log(err);
+                    alert(err.responseJSON.msg);
+                });
+            }
+        </script>
+
+        <script>
+           
 
             function deleteById(id) {
                 $.ajax({
