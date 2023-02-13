@@ -55,7 +55,7 @@ public class ReplyController {
             throw new CustomApiException("인증이 되지 않았습니다.", HttpStatus.UNAUTHORIZED);
         }
         replyService.댓글삭제(id, principal.getId());// 실패했을땐 서비스에서 할거니깐
-        return new ResponseEntity<>(new ResponseDto<>(1, "삭제성공", null), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDto<>(1, "댓글삭제성공", null), HttpStatus.OK);
     }
 
 }

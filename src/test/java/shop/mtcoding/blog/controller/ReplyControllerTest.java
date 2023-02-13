@@ -1,5 +1,6 @@
 package shop.mtcoding.blog.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,6 +18,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+import org.yaml.snakeyaml.events.Event.ID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +49,20 @@ public class ReplyControllerTest {
 
         mockSession = new MockHttpSession();
         mockSession.setAttribute("principal", user);
+    }
+
+    @Test
+    public void deleteReply_test() throws Exception {
+        // given
+        int Id = 1;
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                delete("/reply/" + Id)
+                        .session(mockSession));
+
+        // then
+        resultActions.andExpect(status().isOk());
     }
 
     @Test

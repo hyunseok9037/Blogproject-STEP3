@@ -43,7 +43,9 @@
                         <div>${reply.comment}</div>
                         <div class="d-flex">
                             <div class="font-italic">작성자 : ${reply.username} &nbsp;</div>
+                            <c:if test="${principal.id == reply.userId}" >
                             <button onClick="deleteByReplyId(${reply.id})" class="badge bg-secondary">삭제</button>
+                            </c:if>
                         </div>
                     </li>
                 </c:forEach>
@@ -61,7 +63,8 @@
                     dataType: "json"
                 }).done((res) => {    // 20x 일때
                     alert(res.msg);
-                    location.href = "/";
+                    // location.reload();
+                    $("#reply-"+id).remove();
                 }).fail((err) => {    // 40x , 50x 일때
                     // console.log(err);
                     alert(err.responseJSON.msg);
