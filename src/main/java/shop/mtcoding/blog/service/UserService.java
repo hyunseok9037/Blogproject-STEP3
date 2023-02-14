@@ -3,18 +3,33 @@ package shop.mtcoding.blog.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import shop.mtcoding.blog.dto.user.UserReq.JoinReqDto;
 import shop.mtcoding.blog.dto.user.UserReq.LoginReqDto;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.model.UserRepository;
+import shop.mtcoding.blog.util.PathUtil;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Transactional
+    public User 프로필사진수정(MultipartFile profile, int pricipalId) {
+        // 1번 사진을 /static/image에 UUID로 변경해서 저장
+        String uuidImageName = PathUtil.writeImageFile(profile);
+
+        // 2번 저장된 파일의 경로를 DB에 저장
+        User userPS = userRepository.findById(pricipalId);
+        userPS.setProfile(uuidImageName);
+        userRepository.updateById(userPS.getId(), userPS.getUsername(), userPS.getPassword(), userPS.getEmail(),
+                userPS.getProfile(), userPS.getCreatedAt());
+        return userPS;
+    }
 
     @Transactional // insert 변경코드가 발동하면 락이 걸린다. 트랜잭션이 걸리면 못들어온다 생각하자
     public void 회원가입(JoinReqDto joinReqDto) {
@@ -35,8 +50,5 @@ public class UserService {
         }
         return principal;
     }
-
-    public void 프로필사진수정() {
-    };
 
 }
