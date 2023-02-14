@@ -12,5 +12,6 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String profile; // 사진의 경로 (static/image 폴더에 사진 추가하기)
     private Timestamp createdAt;
 }

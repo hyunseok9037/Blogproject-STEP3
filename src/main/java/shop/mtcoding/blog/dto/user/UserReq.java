@@ -20,4 +20,9 @@ public class UserReq {
         private String password;
     }
 
+    @Setter
+    @Getter
+    public static class profileUpdateReqDto {
+        private String profile;
+    }
 }

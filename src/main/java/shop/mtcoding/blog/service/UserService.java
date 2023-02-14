@@ -34,5 +34,9 @@ public class UserService {
             throw new CustomException("유저네임 혹은 패스워드가 잘못입력되었습니다.");
         }
         return principal;
+    }
+
+    public void 프로필사진수정() {
     };
+
 }

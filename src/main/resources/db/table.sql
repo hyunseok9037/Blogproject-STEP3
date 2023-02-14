@@ -3,6 +3,7 @@ CREATE TABLE user_tb(
     username varchar unique not null,
     password varchar not null,
     email varchar not null,
+    profile varchar null,
     created_at timestamp not null
 );
 
