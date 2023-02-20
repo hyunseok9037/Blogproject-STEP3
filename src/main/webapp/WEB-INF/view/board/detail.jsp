@@ -37,6 +37,7 @@
         <c:when test="${loveDto == null}">
             <i id="heart" class="fa-regular fa-heart fa-lg" value="${loveDto.id}" onclick="loveOrCancel()"></i>
         </c:when>
+
         <c:otherwise>
             <i id="heart" class="fa-solid fa-heart fa-lg" value="${loveDto.id}" onclick="loveOrCancel()"></i>
         </c:otherwise>
@@ -73,6 +74,7 @@
 </div>
 
 <script>
+
         function loveOrCancel(){
             let boardId = $("#boardId").val(); //이엘표기법은 서버사이드 랜더링이 되기 때문이다
             let id = $("#heart").attr("value");
@@ -105,7 +107,7 @@
                     dataType: "json"
                 }).done((res) => { 
                     alert(res.msg);
-                    $("#heart").attr("value", undefined); //취소했으니까 undefined
+                    $("#heart").attr("value", ""); //취소했으니까 undefined
                     $("#heart").removeClass("fa-solid");
                     $("#heart").addClass("fa-regular");
                 }).fail((err) => { 

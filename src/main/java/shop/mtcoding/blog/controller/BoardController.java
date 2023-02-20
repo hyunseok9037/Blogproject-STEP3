@@ -110,7 +110,6 @@ public class BoardController {
 
         model.addAttribute("boardDto", boardRepository.findByIdWithUser(id));
         model.addAttribute("replyDtos", replyRepository.findByBoardIdWithUser(id));
-
         return "board/detail";
     }
 
