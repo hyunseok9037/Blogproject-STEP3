@@ -22,6 +22,7 @@ import shop.mtcoding.blog.handler.ex.CustomApiException;
 import shop.mtcoding.blog.handler.ex.CustomException;
 import shop.mtcoding.blog.model.Board;
 import shop.mtcoding.blog.model.BoardRepository;
+import shop.mtcoding.blog.model.LoveRepository;
 import shop.mtcoding.blog.model.ReplyRepository;
 import shop.mtcoding.blog.model.User;
 import shop.mtcoding.blog.service.BoardService;
@@ -40,6 +41,9 @@ public class BoardController {
 
     @Autowired
     private ReplyRepository replyRepository;
+
+    @Autowired
+    private LoveRepository loveRepository;
 
     @PutMapping("/board/{id}")
     public @ResponseBody ResponseEntity<?> update(@PathVariable int id,
@@ -97,11 +101,16 @@ public class BoardController {
         return "board/main";
     }
 
-    /***** */
     @GetMapping("/board/{id}")
     public String detail(@PathVariable int id, Model model) {
+        User principal = (User) session.getAttribute("principal");
+        if (principal != null) {
+            model.addAttribute("loveDto", loveRepository.findByBoardIdAndUserId(id, principal.getId()));
+        }
+
         model.addAttribute("boardDto", boardRepository.findByIdWithUser(id));
         model.addAttribute("replyDtos", replyRepository.findByBoardIdWithUser(id));
+
         return "board/detail";
     }
 

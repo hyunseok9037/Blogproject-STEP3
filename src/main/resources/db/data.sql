@@ -13,4 +13,8 @@ INSERT INTO reply_tb(comment,user_id,board_id,created_at) values('댓글2', 1, 2
 INSERT INTO reply_tb(comment,user_id,board_id,created_at) values('댓글3', 2, 1, now());
 INSERT INTO reply_tb(comment,user_id,board_id,created_at) values('댓글4', 2, 2, now());
 
+INSERT INTO love_tb(board_id,user_id,created_at) values(1,1,now());
+INSERT INTO love_tb(board_id,user_id,created_at) values(1,2,now());
+
+
 commit;

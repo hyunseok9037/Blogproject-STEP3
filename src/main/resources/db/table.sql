@@ -22,3 +22,10 @@ CREATE TABLE reply_tb(
     board_id int not null,
     created_at timestamp not null
 );
+
+CREATE TABLE love_tb(
+    id int auto_increment primary key,
+    board_id int not null,
+    user_id int not null,
+    created_at timestamp not null
+);
